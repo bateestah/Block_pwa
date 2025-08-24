@@ -65,11 +65,7 @@ function merge(arena, player) {
 }
 
 function rotate(matrix) {
-  const N = matrix.length;
-  const result = matrix.map((row, y) =>
-    row.map((_, x) => matrix[N - 1 - x][y])
-  );
-  return result;
+  return matrix[0].map((_, i) => matrix.map(row => row[i]).reverse());
 }
 
 function playerRotate() {
