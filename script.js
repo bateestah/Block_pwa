@@ -65,11 +65,7 @@ function merge(arena, player) {
 }
 
 function rotate(matrix) {
-  const N = matrix.length;
-  const result = matrix.map((row, y) =>
-    row.map((_, x) => matrix[N - 1 - x][y])
-  );
-  return result;
+  return matrix[0].map((_, i) => matrix.map(row => row[i]).reverse());
 }
 
 function playerRotate() {
@@ -189,6 +185,11 @@ document.addEventListener('keydown', e => {
   else if (e.key === 'ArrowDown') playerDrop();
   else if (e.key === 'ArrowUp') playerRotate();
 });
+
+document.getElementById('left').addEventListener('click', () => playerMove(-1));
+document.getElementById('right').addEventListener('click', () => playerMove(1));
+document.getElementById('down').addEventListener('click', playerDrop);
+document.getElementById('rotate').addEventListener('click', playerRotate);
 
 playerReset();
 update();
