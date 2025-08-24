@@ -190,5 +190,10 @@ document.addEventListener('keydown', e => {
   else if (e.key === 'ArrowUp') playerRotate();
 });
 
+document.getElementById('left').addEventListener('click', () => playerMove(-1));
+document.getElementById('right').addEventListener('click', () => playerMove(1));
+document.getElementById('down').addEventListener('click', playerDrop);
+document.getElementById('rotate').addEventListener('click', playerRotate);
+
 playerReset();
 update();
