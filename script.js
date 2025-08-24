@@ -1,10 +1,15 @@
 const canvas = document.getElementById('game');
 const context = canvas.getContext('2d');
+const nextCanvas = document.getElementById('next');
+const nextContext = nextCanvas.getContext('2d');
 const grid = 20;
 const cols = canvas.width / grid;
 const rows = canvas.height / grid;
+const nextCols = nextCanvas.width / grid;
+const nextRows = nextCanvas.height / grid;
 
 context.scale(grid, grid);
+nextContext.scale(grid, grid);
 
 const shapes = [
   [[1,1,1,1]],
@@ -26,19 +31,30 @@ const player = {
   color: '#FFF'
 };
 
+let next = { matrix: null, color: '#FFF' };
+
 function createPiece(typeIndex) {
   return shapes[typeIndex];
 }
 
-function playerReset() {
+function getRandomPiece() {
   const typeIndex = Math.floor(Math.random() * shapes.length);
-  player.matrix = createPiece(typeIndex);
-  player.color = colors[typeIndex];
+  return { matrix: createPiece(typeIndex), color: colors[typeIndex] };
+}
+
+function playerReset() {
+  if (!next.matrix) {
+    next = getRandomPiece();
+  }
+  player.matrix = next.matrix;
+  player.color = next.color;
   player.pos.y = 0;
   player.pos.x = (cols / 2 | 0) - (player.matrix[0].length / 2 | 0);
   if (collide(arena, player)) {
     arena.forEach(row => row.fill(0));
   }
+  next = getRandomPiece();
+  drawNext();
 }
 
 function collide(arena, player) {
@@ -131,6 +147,23 @@ function drawMatrix(matrix, offset) {
       if (value) {
         context.fillStyle = player.color;
         context.fillRect(x + offset.x, y + offset.y, 1, 1);
+      }
+    });
+  });
+}
+
+function drawNext() {
+  nextContext.fillStyle = '#000';
+  nextContext.fillRect(0, 0, nextCanvas.width, nextCanvas.height);
+  const offset = {
+    x: (nextCols - next.matrix[0].length) / 2,
+    y: (nextRows - next.matrix.length) / 2
+  };
+  next.matrix.forEach((row, y) => {
+    row.forEach((value, x) => {
+      if (value) {
+        nextContext.fillStyle = next.color;
+        nextContext.fillRect(x + offset.x, y + offset.y, 1, 1);
       }
     });
   });

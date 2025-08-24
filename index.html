@@ -11,13 +11,16 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="game" width="200" height="400"></canvas>
-  <div id="controls">
-    <button id="left" class="control-btn">&#9664;</button>
-    <button id="rotate" class="control-btn">&#8635;</button>
-    <button id="right" class="control-btn">&#9654;</button>
-    <button id="down" class="control-btn">&#9660;</button>
-  </div>
+    <div id="game-area">
+      <canvas id="game" width="200" height="400"></canvas>
+      <canvas id="next" width="80" height="80"></canvas>
+    </div>
+    <div id="controls">
+      <button id="left" class="control-btn">&#9664;</button>
+      <button id="rotate" class="control-btn">&#8635;</button>
+      <button id="down" class="control-btn">&#9660;</button>
+      <button id="right" class="control-btn">&#9654;</button>
+    </div>
   <script src="script.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
