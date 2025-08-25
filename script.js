@@ -33,6 +33,12 @@ const player = {
 
 let next = { matrix: null, color: '#FFF' };
 
+let score = 0;
+
+function updateScore() {
+  document.getElementById('score').innerText = 'Score: ' + score;
+}
+
 function createPiece(typeIndex) {
   return shapes[typeIndex];
 }
@@ -52,6 +58,8 @@ function playerReset() {
   player.pos.x = (cols / 2 | 0) - (player.matrix[0].length / 2 | 0);
   if (collide(arena, player)) {
     arena.forEach(row => row.fill(0));
+    score = 0;
+    updateScore();
   }
   next = getRandomPiece();
   drawNext();
@@ -96,6 +104,7 @@ function playerRotate() {
 }
 
 function arenaSweep() {
+  let rowCount = 0;
   outer: for (let y = arena.length -1; y >=0; --y) {
     for (let x = 0; x < arena[y].length; ++x) {
       if (!arena[y][x]) {
@@ -105,6 +114,11 @@ function arenaSweep() {
     const row = arena.splice(y,1)[0].fill(0);
     arena.unshift(row);
     ++y;
+    rowCount++;
+  }
+  if (rowCount > 0) {
+    score += rowCount * 10;
+    updateScore();
   }
 }
 
@@ -224,5 +238,6 @@ document.getElementById('right').addEventListener('click', () => playerMove(1));
 document.getElementById('down').addEventListener('click', playerDrop);
 document.getElementById('rotate').addEventListener('click', playerRotate);
 
+updateScore();
 playerReset();
 update();
