@@ -43,8 +43,21 @@ function createPiece(typeIndex) {
   return shapes[typeIndex];
 }
 
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+let bag = [];
+
 function getRandomPiece() {
-  const typeIndex = Math.floor(Math.random() * shapes.length);
+  if (bag.length === 0) {
+    bag = shuffle([...Array(shapes.length).keys()]);
+  }
+  const typeIndex = bag.pop();
   return { matrix: createPiece(typeIndex), color: colors[typeIndex] };
 }
 
