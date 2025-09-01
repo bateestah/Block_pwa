@@ -161,6 +161,34 @@ function playerDrop() {
   dropCounter = 0;
 }
 
+function playerHardDrop() {
+  while (!collide(arena, player)) {
+    player.pos.y++;
+  }
+  player.pos.y--;
+  merge(arena, player);
+  arenaSweep();
+  playerReset();
+  dropCounter = 0;
+}
+
+function playerSwitch() {
+  const tempMatrix = player.matrix;
+  const tempColor = player.color;
+  player.matrix = next.matrix;
+  player.color = next.color;
+  player.pos.y = 0;
+  player.pos.x = (cols / 2 | 0) - (player.matrix[0].length / 2 | 0);
+  if (collide(arena, player)) {
+    arena.forEach(row => row.fill(0));
+    score = 0;
+    updateScore();
+  }
+  next.matrix = tempMatrix;
+  next.color = tempColor;
+  drawNext();
+}
+
 function playerMove(dir) {
   player.pos.x += dir;
   if (collide(arena, player)) {
@@ -244,12 +272,16 @@ document.addEventListener('keydown', e => {
   else if (e.key === 'ArrowRight') playerMove(1);
   else if (e.key === 'ArrowDown') playerDrop();
   else if (e.key === 'ArrowUp') playerRotate();
+  else if (e.code === 'Space') playerHardDrop();
+  else if (e.key === 'Shift') playerSwitch();
 });
 
 document.getElementById('left').addEventListener('click', () => playerMove(-1));
 document.getElementById('right').addEventListener('click', () => playerMove(1));
 document.getElementById('down').addEventListener('click', playerDrop);
 document.getElementById('rotate').addEventListener('click', playerRotate);
+document.getElementById('drop').addEventListener('click', playerHardDrop);
+document.getElementById('switch').addEventListener('click', playerSwitch);
 
 updateScore();
 playerReset();
